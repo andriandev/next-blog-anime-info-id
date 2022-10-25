@@ -46,6 +46,10 @@ function MetaHead(props) {
         property="og:site_name"
         content={process.env.NEXT_PUBLIC_SITE_TITLE}
       />
+      <meta
+        name="google-site-verification"
+        content={process.env.NEXT_PUBLIC_SITE_GSC}
+      />
       <link
         rel="canonical"
         href={
