@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 function Sidebar(props) {
-  const { allPost } = props;
+  const { recentPost } = props;
 
   return (
     <div className="col-12 col-md-4">
@@ -9,12 +9,15 @@ function Sidebar(props) {
         <div className="card-body">
           <h5>Recent Post</h5>
           <ol className="list-group list-group-numbered">
-            {allPost.map((post) => (
-              <Link href={`/${post.slug}`} key={post.id}>
-                <a className="text-decoration-none">
-                  <li className="text-primary"># {post.title}</li>
-                </a>
-              </Link>
+            {recentPost.map((post) => (
+              <li key={post.id}>
+                #{' '}
+                <Link href={`/${post.slug}`}>
+                  <a className="text-decoration-none text-primary">
+                    {post.title}
+                  </a>
+                </Link>
+              </li>
             ))}
           </ol>
         </div>

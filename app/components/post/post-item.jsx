@@ -4,6 +4,8 @@ import Link from 'next/link';
 function PostItem(props) {
   const { id, slug, title, image } = props;
 
+  const imgUrl = image.includes('https://') ? image : `/assets/img/${image}`;
+
   return (
     <>
       <Link href={`/${slug}`}>
@@ -11,7 +13,7 @@ function PostItem(props) {
           <MyImage
             width={600}
             height={350}
-            src={`/assets/img/${image}`}
+            src={imgUrl}
             className="card-img-top"
             alt={title}
           />

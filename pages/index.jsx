@@ -1,9 +1,9 @@
 import MetaHead from '@/components/shared/meta-head';
 import PostList from '@/components/post/post-list';
 import Pagination from '@/components/shared/pagination';
-import { getAllPost, getPageCount } from '@/config/data';
+import { getAllPost, getPageCount } from '@/controllers/post-controller';
 
-function Home(props) {
+function HomePage(props) {
   const { post, pageCount, page } = props;
 
   return (
@@ -19,20 +19,25 @@ function Home(props) {
 }
 
 export async function getStaticProps() {
-  const post = getAllPost();
+  const page = 1;
+  const post = await getAllPost(page);
 
-  if (!post) {
+  if (post.length == 0) {
     return {
       notFound: true,
     };
   }
 
-  const pageCount = getPageCount();
-  const page = 1;
+  const pageCount = await getPageCount();
 
   return {
-    props: { post: post, pageCount: pageCount, page: page },
+    props: {
+      post: post,
+      pageCount: pageCount,
+      page: page,
+    },
+    revalidate: +process.env.REVALIDATE_TIME,
   };
 }
 
-export default Home;
+export default HomePage;

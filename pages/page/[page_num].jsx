@@ -1,7 +1,7 @@
 import MetaHead from '@/components/shared/meta-head';
 import PostList from '@/components/post/post-list';
 import Pagination from '@/components/shared/pagination';
-import { getAllPost, getPageCount } from '@/config/data';
+import { getAllPost, getPageCount } from '@/controllers/post-controller';
 
 function HomePageNum(props) {
   const { post, pageCount, page } = props;
@@ -21,7 +21,7 @@ function HomePageNum(props) {
 export async function getStaticProps(context) {
   const { params } = context;
   const page = params.page_num;
-  const post = getAllPost(page);
+  const post = await getAllPost(page);
 
   if (post.length === 0) {
     return {
@@ -29,10 +29,15 @@ export async function getStaticProps(context) {
     };
   }
 
-  const pageCount = getPageCount();
+  const pageCount = await getPageCount();
 
   return {
-    props: { post: post, pageCount: pageCount, page: page },
+    props: {
+      post: post,
+      pageCount: pageCount,
+      page: page,
+    },
+    revalidate: +process.env.REVALIDATE_TIME,
   };
 }
 

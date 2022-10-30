@@ -4,7 +4,9 @@
     "paths": {
       "@/components/*": ["app/components/*"],
       "@/layout/*": ["app/layout/*"],
-      "@/config/*": ["app/config/*"]
+      "@/config/*": ["app/config/*"],
+      "@/models/*": ["app/models/*"],
+      "@/controllers/*": ["app/controllers/*"]
     }
   }
 }

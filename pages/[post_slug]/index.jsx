@@ -1,11 +1,15 @@
 import MetaHead from '@/components/shared/meta-head';
 import MyImage from '@/components/shared/my-image';
 import Sidebar from '@/layout/sidebar';
-import { getPostBySlug, getAllPost } from '@/config/data';
+import { getPostBySlug } from '@/controllers/post-controller';
 import { Parser } from 'html-to-react';
 
 function Post(props) {
-  const { post, allPost } = props;
+  const { post, recentPost } = props;
+
+  const imgUrl = post.image.includes('https://')
+    ? post.image
+    : `/assets/img/${post.image}`;
 
   return (
     <>
@@ -21,7 +25,7 @@ function Post(props) {
               <MyImage
                 width={850}
                 height={480}
-                src={`/assets/img/${post.image}`}
+                src={imgUrl}
                 alt={post.title}
                 className="rounded"
               />
@@ -32,7 +36,7 @@ function Post(props) {
             </div>
           </div>
         </div>
-        <Sidebar allPost={allPost} />
+        <Sidebar recentPost={recentPost} />
       </div>
     </>
   );
@@ -40,18 +44,20 @@ function Post(props) {
 
 export async function getStaticProps(context) {
   const { params } = context;
-  const postData = getPostBySlug(params.post_slug);
+  const postData = await getPostBySlug(params.post_slug);
 
-  if (!postData) {
+  if (postData.post.length == 0) {
     return {
       notFound: true,
     };
   }
 
-  const allPost = getAllPost(1, 5);
-
   return {
-    props: { post: postData, allPost: allPost },
+    props: {
+      post: postData.post[0],
+      recentPost: postData.recentPost,
+    },
+    revalidate: +process.env.REVALIDATE_TIME,
   };
 }
 
